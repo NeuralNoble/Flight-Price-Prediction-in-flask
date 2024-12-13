@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Flight Price Prediction</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Variables */
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --error: #e74c3c;
+        }
+
+        body {
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #1a91ff 0%, #6eb6ff 100%);
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-logo span {
+            font-size: 1.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 5rem;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Flash Messages */
+        .flash-container {
+            position: fixed;
+            top: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .flash-message {
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flash-message.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .flash-message.error {
+            border-left: 4px solid var(--error);
+        }
+
+        .flash-message.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        .flash-message.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Background Elements */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            animation: float-by linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .cloud-1 {
+            width: 100px;
+            height: 40px;
+            top: 20%;
+            left: -100px;
+            animation-duration: 15s;
+        }
+
+        .cloud-2 {
+            width: 140px;
+            height: 50px;
+            top: 45%;
+            left: -140px;
+            animation-duration: 25s;
+            animation-delay: 5s;
+        }
+
+        .cloud-3 {
+            width: 80px;
+            height: 30px;
+            top: 70%;
+            left: -80px;
+            animation-duration: 20s;
+            animation-delay: 10s;
+        }
+
+        @keyframes float-by {
+            from {
+                transform: translateX(-100px);
+            }
+            to {
+                transform: translateX(calc(100vw + 100px));
+            }
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 1rem;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+
+            .flash-container {
+                width: 95%;
+            }
+
+            .flash-message {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="{{ url_for('home') }}" class="nav-logo">
+                <span>✈️</span> Flight Price Predictor
+            </a>
+        </div>
+    </nav>
+
+    <!-- Background Elements -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+
+    <!-- Flash Messages -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Flight Price Predictor. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
