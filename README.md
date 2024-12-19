@@ -26,3 +26,6 @@ A modern web application that predicts flight prices using machine learning. Thi
 
 ## Preview
 <img width="1430" alt="Screenshot 2024-12-13 at 8 44 29 PM" src="https://github.com/user-attachments/assets/064a425d-798d-4557-bc02-e51c4245421f" />
+
+## Demo video
+https://youtu.be/1irWrbtIc20
